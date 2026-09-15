@@ -2,7 +2,7 @@
 | -------------- | ---------------- |
 | Kathryn Rupp   | KathrynRupp      |
 | Nathan Ho      | nathanho06092006 |
-| Anika Mukka    |
+| Anika Mukka    | anika-mukka      |
 | Xuan Thien Bui | thien952006      |
 
 Working Agreement:
@@ -12,4 +12,4 @@ Working Agreement:
 - Conflict resolution: We plan to resolve disagreements by having a conversation as a group to either choose one option or compromise between them
 
 Project Domain:
-(paragraph, 3-5 sentences on domain, computing for common good relevance, who benefits, what problem it addresses)
+We are looking to build a tool to help students find internships, interview prep materials, and other resources that would aid them in advancing in their career through one hub. We feel that this would align with the Computing for the Common Good standpoint in that it would alleviate some of the difficulty students experience in finding career help resources, and hopefully aid in their social and career aspirations. Students would benefit from centralized resources that other students have found helpful and it would address their difficulty in not only finding job listings but in knowing how to maximize their potential when applying.
