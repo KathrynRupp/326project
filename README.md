@@ -7,7 +7,7 @@
 
 Working Agreement:
 
-- Day-to-day communication: iMessage groupchat and school emails
+- Day-to-day communication: iMessage group chat and school emails, mostly concentrated on Mondays and Wednesdays when group members are free
 - What "done" means for a PR: A PR is "done" if it passes review from at least one teammate
 - Conflict resolution: We plan to resolve disagreements by having a conversation as a group to either choose one option or compromise between them
 
