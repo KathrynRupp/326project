@@ -1,0 +1,25 @@
+{
+  "name": "326project",
+  "version": "1.0.0",
+  "description": "| Name           | GitHub Username  | | -------------- | ---------------- | | Kathryn Rupp   | KathrynRupp      | | Nathan Ho      | nathanho06092006 | | Anika Mukka    | anika-mukka      | | Xuan Thien Bui | thien952006      |",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KathrynRupp/326project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/KathrynRupp/326project/issues"
+  },
+  "homepage": "https://github.com/KathrynRupp/326project#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
