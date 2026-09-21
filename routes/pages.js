@@ -3,7 +3,7 @@ import { join } from "path";
 
 const router = Router();
 
-app.get("/", (req, res) => {
+router.get("/", (req, res) => {
   res.send("<h1>Home</h1>");
 });
 

@@ -2,8 +2,7 @@ import { Router } from "express";
 
 const router = Router();
 
-app.get("/listings", (req, res) => {
-  // rename to fit your project
+router.get("/", (req, res) => {
   res.send("<h1>Item List</h1>");
 });
 
