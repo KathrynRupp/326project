@@ -1,14 +1,17 @@
-import express from 'express';
+import express from "express";
+import pagesRouter from "./routes/pages.js";
+import listingsRouter from "./routes/listings.js";
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.port || 3000;
 
+//routes
+app.use("/", pagesRouter);
+app.use("/listings", listingsRouter);
 
-app.get('/', (req, res) => {
-  res.send('<h1>Home</h1>');
-});
-app.get('/listings', (req, res) => {   // rename to fit your project
-  res.send('<h1>Item List</h1>');
+//page not found
+app.use((req, res) => {
+  res.status(404).send("Page not found.");
 });
 
 app.listen(PORT, () => {
