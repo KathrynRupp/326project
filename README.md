@@ -64,4 +64,8 @@ One design decision I made was to include a validation function in the listingsR
 
 ### Nathan Ho
 
+I followed the units approach without weighing anything. One decision I chose to take was to add a dropdown menu I modified from MDN here: (https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/select), instead of the standard free-text entry we've been practicing in class.
+The error message sent back when I was first testing the program was vague for me, "Your listing was not saved. title, name of lister, and correct category are required." I had assumed that my code was failing somewhere like having a typo, but I just didn't add a valid field for the category.
+Adding the field was a bit more work than doing the standard free-text we've done in class, but it makes the program easier to use for people who haven't looked at the code, especially when the said categories aren't listed anywhere within the user interface. It does make it more tedious to go back and add another category every single time you want to incorporate a different category into the code, but I think the programs ease of use with a drop down menu outweighs that, as well as the "other" category is a catch all for categories not listed, so we wouldn't even need to add new categories.
+
 ### Xuan Thien Bui
