@@ -5,8 +5,9 @@ import { asyncHandler } from "../asyncHandler.js";
 
 const router = Router();
 
-router.get("/", asyncHandler(controller.list));
+router.get("/", asyncHandler(controller.list)); 
 router.post("/", asyncHandler(controller.create));
 router.get("/:id", asyncHandler(controller.getOne));
+router.delete("/:id", asyncHandler(controller.destroy));
 
 export default router;
