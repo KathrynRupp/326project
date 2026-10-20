@@ -62,6 +62,8 @@ One design decision I made was to include a validation function in the listingsR
 
 ### Anika Mukka
 
+One design decision I made was to put validation in requestsService.js instead of putting it only in the controller. The service checks that title and requesterName are present, that category is one of the allowed values, and that neededBy is a real date and throws a 400 error with an error message if any check fails. This was the way we did it in class, so I just followed the same procedure here. The alternative is to do these checks in requestsController.js, where the request body is read. The controller handles the HTTP part of this project, so putting the validation there would mix business rules in with code that deals with req and res. If anything else ever creates a request, the rules would have to be copied, and testing a rule would mean building a fake req and res first. But if the rules are in the service layer, every caller gets them automatically, and a test can just call the function with a bad input and check that it throws an error.
+
 ### Nathan Ho
 
 I followed the units approach without weighing anything. One decision I chose to take was to add a dropdown menu I modified from MDN here: (https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/select), instead of the standard free-text entry we've been practicing in class.
