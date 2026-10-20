@@ -7,3 +7,7 @@ I did not use any AI in this commit.
 ## Sprint 1
 
 I did not use any AI in this commit.
+
+## Sprint 2
+
+I did not use any AI in this commit.
