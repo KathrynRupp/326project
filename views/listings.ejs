@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Listings</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+
+  <body>
+    <h1>Listings</h1>
+    <main>
+      <form id="listing-form">
+        <input type="text" name="title" placeholder="Title" />
+        <select name="category">
+          <option value="">Choose a category</option>
+          <option value="calculators">Calculator</option>
+          <option value="textbooks">Textbooks</option>
+          <option value="clothing">Clothing</option>
+          <option value="kitchen">Kitchen</option>
+          <option value="other">Other</option>
+        </select>
+
+
+
+        <input type="text" name="description" placeholder="Description" />
+        <input type="text" name="listerName" placeholder="Your Name" />
+        <button type="submit">Add Listing</button>
+      </form>
+      <ul id="listings">
+        <% listings.forEach((listing) => { %>
+          <li data-id="<%= listing.id %>" data-title="<%= listing.title %>" data-category="<%= listing.category %>" data-description="<%= listing.description %>" data-lister-name="<%= listing.listerName %>">
+            <span class="listing-display"><strong><%= listing.title %>:</strong>  (<%= listing.category %>) <%= listing.description %> listed by <%= listing.listerName %></span>
+            <button class="edit-btn" type="button">Edit</button>
+            <button class="delete-btn" type="button">Delete</button>
+          </li>
+        <% }); %>
+      </ul>
+    </main>
+    <script src="/listings.js" defer></script>
+  </body>
+</html>
