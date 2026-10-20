@@ -4,7 +4,7 @@ import { join } from "path";
 const router = Router();
 
 router.get("/", (req, res) => {
-  res.send("<h1>Home</h1>");
+  res.render("home");
 });
 
 export default router;

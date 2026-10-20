@@ -1,0 +1,49 @@
+<%
+  const formatDate = (value) =>
+    new Date(value).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      timeZone: "UTC",
+    });
+%>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Requests</title>
+    <link rel="stylesheet" href="/style.css"/>
+  </head>
+  <body>
+    <%- include('partials/header') %>
+    <main>
+      <h2>Requests</h2>
+      <form id="request-form">
+        <input type="text" name="title" placeholder="What do you need" />
+        <select name="category">
+          <option value="">Choose a category</option>
+          <option value="calculators">Calculator</option>
+          <option value="textbooks">Textbooks</option>
+          <option value="clothing">Clothing</option>
+          <option value="kitchen">Kitchen</option>
+          <option value="other">Other</option>
+        </select>
+        <input type="text" name="description" placeholder="Details(optional)"/>
+        <input type="text" name="requesterName" placeholder="Your Name"/>
+        <label class="date-field">
+          Needed by (optional)
+          <input type="date" name="neededBy"/>
+        </label>
+        <button type="submit">Post Request</button>
+      </form>
+      <ul id="requests">
+        <% requests.forEach((request) => { %>
+          <li data-id="<%= request._id %>">
+            <span class="request-display"><strong><%= request.title %>:</strong> (<%= request.category %>)<% if (request.description) { %> <%= request.description %><% } %> requested by <%= request.requesterName %><% if (request.neededBy) { %>, needed by <%= formatDate(request.neededBy) %><% } %></span>
+          </li>
+        <% }); %>
+      </ul>
+    </main>
+    <script src="/requests.js" defer></script>
+  </body>
+</html>
