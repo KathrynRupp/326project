@@ -27,4 +27,41 @@ Our project domain is a borrowing forum for students. In this forum, students ca
 
 - Clone the repository to your local machine, and run "npm install" within the terminal within the folder "326 Project"
 - Run "npm start" within the terminal to start the server on your machine. This server opens on your machine, with the port 3000.
-- Only two routes are included currently, which is the home page: "http://localhost:3000/", and listings, which you can visit with the link: "http://localhost:3000/listings".
+- You can visit any of the three routes that are currently included:
+  - The home page: "http://localhost:3000/"
+  - The listings page: "http://localhost:3000/listings"
+  - The requests page: "http://localhost:3000/requests"
+
+## Features:
+
+### The Listings Page
+
+The first feature we created was the listings feature. This page is meant to be a forum where people can post the things they want to lend out. You can GET, POST, PUT, and DELETE from the page, meaning you can freely see, add, change, or remove any of the listings on the forum at the moment:
+
+- http://localhost:3000/listings" is where you can see all the listings, status code 200
+- Add a new listing with the add button (all fields must be added except the description, which is optional); returns a status code 201 and the updated page with the listing
+- Update a listing with the edit button; returns a status code 200 with the updated page with the updated listing
+- Delete a listing with the delete button; returns a status code 204 with the updated page without that listing
+
+### The Requests Page
+
+The next feature is very similar to the first, but the major difference is that people are posting to request an item they are seeking out. You can GET, PUT, POST, and DELETE from the page:
+
+- "http://localhost:3000/requests" is where you can see all of the listings, status code 200
+- Add a new request with the add button (all fields must be added except the description, which is optional); returns a status code 201 and the updated page with the request
+- Update a request with the edit button; returns a status code 200 with the updated page with the request
+- Delete a request with the delete button; returns a status code 204 with the updated page without that listing.
+
+## System Diagram
+
+## Design Decisions
+
+### Kathryn Rupp
+
+One design decision I made was to include a validation function in the listingsRepository, in order to validate whether a listing's id is valid or not according to mongoose's standards. Even though this makes it so that there is validation in the repository, it makes it so that the service above it does not have to write/read from the database or make use of Mongoose. I felt that this was better than the alternative because it means mongoose and the database only have to be accessed in one place, and seems like it most strictly conforms to the four-layer architecture that we learned about in class.
+
+### Anika Mukka
+
+### Nathan Ho
+
+### Xuan Thien Bui
