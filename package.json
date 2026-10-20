@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/KathrynRupp/326project#readme",
   "dependencies": {
-    "express": "^5.2.1"
+    "ejs": "^7.0.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.11.2"
   }
 }
