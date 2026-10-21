@@ -7,7 +7,7 @@ function httpError(status, message) {
   err.status = status;
   return err;
 }
-
+// validation
 export async function createRequest(input = {}) {
   const title = (input.title || "").trim();
   const category = (input.category || "").trim();
@@ -34,12 +34,18 @@ export async function createRequest(input = {}) {
   });
 }
 
+// get all the requests
 export async function getAllRequests() {
   return repo.findAll();
 }
-
+// get a certain request
 export async function getRequestById(id) {
   const request = await repo.findById(id);
   if (!request) throw httpError(404, "Request not found.");
   return request;
+}
+// delete
+export async function deleteRequest(id) {
+  const removed = await repo.removeById(id);
+  if (!removed) throw httpError(404, "Request not found.");
 }

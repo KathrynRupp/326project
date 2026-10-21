@@ -25,7 +25,8 @@ Our project domain is a borrowing forum for students. In this forum, students ca
 
 ## Setup:
 
-- Clone the repository to your local machine, and run "npm install" within the terminal within the folder "326 Project"
+- Clone the repository to your local machine, and run "npm install" within the terminal within the folder "326Project"
+- Start MongoDB by running "dc-up mongo"
 - Run "npm start" within the terminal to start the server on your machine. This server opens on your machine, with the port 3000.
 - You can visit any of the three routes that are currently included:
   - The home page: "http://localhost:3000/"
@@ -38,19 +39,18 @@ Our project domain is a borrowing forum for students. In this forum, students ca
 
 The first feature we created was the listings feature. This page is meant to be a forum where people can post the things they want to lend out. You can GET, POST, PUT, and DELETE from the page, meaning you can freely see, add, change, or remove any of the listings on the forum at the moment:
 
-- http://localhost:3000/listings" is where you can see all the listings, status code 200
+- "http://localhost:3000/listings" is where you can see all the listings, status code 200
 - Add a new listing with the add button (all fields must be added except the description, which is optional); returns a status code 201 and the updated page with the listing
 - Update a listing with the edit button; returns a status code 200 with the updated page with the updated listing
 - Delete a listing with the delete button; returns a status code 204 with the updated page without that listing
 
 ### The Requests Page
 
-The next feature is very similar to the first, but the major difference is that people are posting to request an item they are seeking out. You can GET, PUT, POST, and DELETE from the page:
+The next feature is very similar to the first, but the major difference is that people are posting to request an item they are seeking out. You can GET, POST, and DELETE from the page:
 
-- "http://localhost:3000/requests" is where you can see all of the listings, status code 200
-- Add a new request with the add button (all fields must be added except the description, which is optional); returns a status code 201 and the updated page with the request
-- Update a request with the edit button; returns a status code 200 with the updated page with the request
-- Delete a request with the delete button; returns a status code 204 with the updated page without that listing.
+- "http://localhost:3000/requests" is where you can see all of the requests, status code 200
+- Add a new request with the form (all fields must be added except the description and needed by date, which are optional); returns a status code 201 and the updated page with the request. If something required is missing or invalid, the server returns a 400 error.
+- Delete a request with the delete button; returns a status code 204 and the request disappears from the page. Deleting a request that does not exist returns a 404.
 
 ## System Diagram
 
