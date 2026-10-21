@@ -54,6 +54,36 @@ The next feature is very similar to the first, but the major difference is that 
 
 ## System Diagram
 
+                                                      +------------+
+                                      +---------------+ server.js  +----------------+
+                                      |               +-----+------+                |
+                                      |                     |                       |
+                                      v                     v                       v
+                           +--------------------+   +-----------------+  +-------------------+
+                           | routes/listings.js |   | routes/pages.js |  |routes/requests.js |
+                           +----------+---------+   +--------+--------+  +----------+--------+
+                                      |                      |                      |
+                                      |                 +----v-----+                |
+         +----------------+-----------v------------+    |public/   |    +-----------v-----------+------------+
+
++--------v---------+ | controllers/ | | style.css| | controllers/ | +-------v-----------+
+|views/listings.ejs| | listingsController.js | +----------+ | requestsController.js | |views/requests.ejs |
++--------+---------+ +-----------+------------+ +------------+----------+ +-------+-----------+
+| | | |
++--------v---------+ +----------v---------+ +--------------+ +----------v---------+ +------v-----------+
+|public/listings.js| | services/ | | dtos/ | | services/ | |public/requests.js|
++--------+---------+ | listingsService.js <--+-+listingsDto.js| | requestsService.js | +-------+----------+
+| +----------+---------+ | +--------------+ +----------+---------+ |
+| | | | |
+| +------------v----------+ | +---------+ +----------v----------+ |
+| | repositories/ | +----+result.js| | repositories/ | |
+| | listingsRepository.js | +---------+ |requestsRepository.js| |
+| +-----------------------+ +---------------------+ |
+| |
+| +------------------+ |
++------------------------------------------>| public/style.css |<------------------------------------+
++------------------+
+
 ## Design Decisions
 
 ### Kathryn Rupp
