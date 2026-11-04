@@ -45,5 +45,5 @@ export const destroy = async (req, res) => {
     res.status(listing.error.status).json({ error: listing.error.message });
     return;
   }
-  res.status(204).send();
+  res.status(200).send("");
 };
