@@ -9,15 +9,11 @@
 | Anika Mukka    | anika-mukka      |
 | Xuan Thien Bui | thien952006      |
 
-Working Agreement:
-
 ## Working Agreement:
 
 - Day-to-day communication: iMessage group chat and school emails, mostly concentrated on Mondays and Wednesdays when group members are free
 - What "done" means for a PR: A PR is "done" if it passes review from at least one teammate
 - Conflict resolution: We plan to resolve disagreements by having a conversation as a group to either choose one option or compromise between them
-
-Project Domain:
 
 ## Project Domain:
 
@@ -89,7 +85,13 @@ The next feature is very similar to the first, but the major difference is that 
 
 ### Kathryn Rupp
 
+#### Sprint 2
+
 One design decision I made was to include a validation function in the listingsRepository, in order to validate whether a listing's id is valid or not according to mongoose's standards. Even though this makes it so that there is validation in the repository, it makes it so that the service above it does not have to write/read from the database or make use of Mongoose. I felt that this was better than the alternative because it means mongoose and the database only have to be accessed in one place, and seems like it most strictly conforms to the four-layer architecture that we learned about in class.
+
+#### Sprint 3
+
+I followed the unit's approach to creating the HTMX interaction for the delete button in the listings route. An alternative way of making the delete button function would be what we did before: a click listener that called fetchJSON with DELETE and then removed the list item from the DOM by hand. The HTMX version removes hand-written fetch and DOM update code, which takes less code and keeps the logic with the button(something the alternative would have cost us). This version is better for our app because it simplifies the logic that the button uses.
 
 ### Anika Mukka
 
@@ -102,4 +104,9 @@ The error message sent back when I was first testing the program was vague for m
 Adding the field was a bit more work than doing the standard free-text we've done in class, but it makes the program easier to use for people who haven't looked at the code, especially when the said categories aren't listed anywhere within the user interface. It does make it more tedious to go back and add another category every single time you want to incorporate a different category into the code, but I think the programs ease of use with a drop down menu outweighs that, as well as the "other" category is a catch all for categories not listed, so we wouldn't even need to add new categories.
 
 ### Xuan Thien Bui
-My design decision was to split views into partials. I put the site header and navigation in one file, views/partials/header.ejs, and include it from each page with <%- include('partials/header') %>. The alternative was to paste the header markup directly into listings.ejs, requests.ejs, and home.ejs. However, I think the partial is better because the navigation is defined once. 
+
+My design decision was to split views into partials. I put the site header and navigation in one file, views/partials/header.ejs, and include it from each page with <%- include('partials/header') %>. The alternative was to paste the header markup directly into listings.ejs, requests.ejs, and home.ejs. However, I think the partial is better because the navigation is defined once.
+
+## Sprint 3 Changes
+
+We did not have to change the repository to use MongoDB because we chose to implement that during Sprint 2. We turned the delete button on the listings page into an HTMX interaction.

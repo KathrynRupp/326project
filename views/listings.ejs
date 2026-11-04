@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <title>Listings</title>
     <link rel="stylesheet" href="/style.css" />
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
   </head>
 
   <body>
@@ -32,7 +33,15 @@
           <li data-id="<%= listing.id %>" data-title="<%= listing.title %>" data-category="<%= listing.category %>" data-description="<%= listing.description %>" data-lister-name="<%= listing.listerName %>">
             <span class="listing-display"><strong><%= listing.title %>:</strong>  (<%= listing.category %>) <%= listing.description %> listed by <%= listing.listerName %></span>
             <button class="edit-btn" type="button">Edit</button>
-            <button class="delete-btn" type="button">Delete</button>
+            <button
+              class="delete-btn"
+              type="button"
+              hx-delete="/listings/<%= listing.id %>"
+              hx-target="closest li"
+              hx-swap="outerHTML"
+              hx-confirm="Delete this listing?">
+              Delete
+            </button>
           </li>
         <% }); %>
       </ul>

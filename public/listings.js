@@ -56,11 +56,13 @@ const buildItem = (listing) => {
   display.className = "listing-display";
   fillDisplay(display, listing);
 
-  item.append(
-    display,
-    makeButton("edit-btn", "Edit"),
-    makeButton("delete-btn", "Delete"),
-  );
+  const deleteBtn = makeButton("delete-btn", "Delete");
+  deleteBtn.setAttribute("hx-delete", `/listings/${listing.id}`);
+  deleteBtn.setAttribute("hx-target", "closest li");
+  deleteBtn.setAttribute("hx-swap", "outerHTML");
+  deleteBtn.setAttribute("hx-confirm", "Delete this listing?");
+
+  item.append(display, makeButton("edit-btn", "Edit"), deleteBtn);
   return item;
 };
 
@@ -87,7 +89,9 @@ form.addEventListener("submit", async (event) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(listing),
     });
-    list.append(buildItem(saved));
+    const item = buildItem(saved);
+    list.append(item);
+    htmx.process(item);
     form.reset();
   } catch (error) {
     alert(`Your listing was not saved. ${error.message}`);
@@ -159,22 +163,5 @@ const startEdit = (item) => {
 list.addEventListener("click", async (event) => {
   if (event.target.matches(".edit-btn")) {
     startEdit(event.target.closest("li"));
-    return;
-  }
-
-  if (!event.target.matches(".delete-btn")) return;
-
-  const button = event.target;
-  const item = button.closest("li");
-  const id = item.dataset.id;
-
-  button.disabled = true;
-
-  try {
-    await fetchJSON(`/listings/${id}`, { method: "DELETE" });
-    item.remove();
-  } catch (error) {
-    alert(`That entry was not deleted. ${error.message}`);
-    button.disabled = false;
   }
 });

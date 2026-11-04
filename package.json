@@ -4,7 +4,7 @@
   "description": "| Name           | GitHub Username  | | -------------- | ---------------- | | Kathryn Rupp   | KathrynRupp      | | Nathan Ho      | nathanho06092006 | | Anika Mukka    | anika-mukka      | | Xuan Thien Bui | thien952006      |",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
     "start": "node server.js"
   },
   "repository": {
@@ -23,5 +23,8 @@
     "ejs": "^7.0.2",
     "express": "^5.2.1",
     "mongoose": "^9.11.2"
+  },
+  "devDependencies": {
+    "jest": "^30.5.2"
   }
 }
