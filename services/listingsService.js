@@ -6,7 +6,7 @@ const CATEGORIES = ["calculators", "textbooks", "clothing", "kitchen", "other"];
 
 //validate listing
 const validateListing = ({ title, listerName, description, category }) => {
-  if (!title || !listerName || !CATEGORIES.includes(category)) {
+  if (!title.trim() || !listerName.trim() || !CATEGORIES.includes(category)) {
     return Err({
       status: 400,
       message: "title, name of lister, and correct category are required.",
