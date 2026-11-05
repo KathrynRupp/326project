@@ -11,16 +11,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Requests</title>
     <link rel="stylesheet" href="/style.css"/>
   </head>
-  <body>
+  <body class="min-h-screen bg-slate-50 text-slate-800">
     <%- include('partials/header') %>
-    <main>
-      <h2>Requests</h2>
-      <form id="request-form">
-        <input type="text" name="title" placeholder="What do you need" />
-        <select name="category">
+    <main class="mx-auto max-w-5xl px-4 py-8">
+      <h2 class="mb-4 text-2xl font-semibold text-slate-900">Requests</h2>
+      <form id="request-form" class="card grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <input class="form-input" type="text" name="title" placeholder="What do you need" />
+        <select class="form-input" name="category">
           <option value="">Choose a category</option>
           <option value="calculators">Calculator</option>
           <option value="textbooks">Textbooks</option>
@@ -28,18 +29,18 @@
           <option value="kitchen">Kitchen</option>
           <option value="other">Other</option>
         </select>
-        <input type="text" name="description" placeholder="Details(optional)"/>
-        <input type="text" name="requesterName" placeholder="Your Name"/>
-        <label class="date-field">
+        <input class="form-input" type="text" name="description" placeholder="Details(optional)"/>
+        <input class="form-input" type="text" name="requesterName" placeholder="Your Name"/>
+        <label class="flex flex-col gap-1 text-sm text-slate-600 sm:flex-row sm:items-center sm:gap-2 lg:col-span-3">
           Needed by (optional)
-          <input type="date" name="neededBy"/>
+          <input class="form-input sm:w-auto" type="date" name="neededBy"/>
         </label>
-        <button type="submit">Post Request</button>
+        <button class="btn-primary" type="submit">Post Request</button>
       </form>
-      <ul id="requests">
+      <ul id="requests" class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <% requests.forEach((request) => { %>
-          <li data-id="<%= request._id %>">
-            <span class="request-display"><strong><%= request.title %>:</strong> (<%= request.category %>)<% if (request.description) { %> <%= request.description %><% } %> requested by <%= request.requesterName %><% if (request.neededBy) { %>, needed by <%= formatDate(request.neededBy) %><% } %></span>
+          <li class="card" data-id="<%= request._id %>">
+            <span class="request-display block break-words text-sm leading-relaxed"><strong><%= request.title %>:</strong> (<%= request.category %>)<% if (request.description) { %> <%= request.description %><% } %> requested by <%= request.requesterName %><% if (request.neededBy) { %>, needed by <%= formatDate(request.neededBy) %><% } %></span>
           </li>
         <% }); %>
       </ul>

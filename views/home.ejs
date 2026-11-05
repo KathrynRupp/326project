@@ -2,20 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Student Borrowing Forum</title>
     <link rel="stylesheet" href="/style.css" />
   </head>
-  <body>
+  <body class="min-h-screen bg-slate-50 text-slate-800">
     <%- include('partials/header') %>
-    <main>
-      <h2>Borrow what you need, lend what you don't</h2>
-      <p>
-        Students share calculators, textbooks, formal clothing, and kitchen
-        supplies so nobody has to buy something they only need once.
+    <main class="mx-auto max-w-5xl px-4 py-10">
+      <h2 class="text-3xl font-bold text-slate-900 sm:text-4xl">Borrow what you need and lend what you don't! </h2>
+      <p class="mt-3 max-w-2xl text-slate-600">
+        Students share items they have but no longer need or use all the time.
       </p>
-      <ul class="home-links">
-        <li><a href="/listings">Browse or post an item to lend</a></li>
-        <li><a href="/requests">Ask to borrow something you need</a></li>
+      <ul class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <li><a class="card block p-6 font-medium text-sky-700 hover:bg-sky-50" href="/listings"> Post an item to lend</a></li>
+        <li><a class="card block p-6 font-medium text-sky-700 hover:bg-sky-50" href="/requests"> Request something to borrow</a></li>
       </ul>
     </main>
   </body>
