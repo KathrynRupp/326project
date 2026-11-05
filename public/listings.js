@@ -2,7 +2,7 @@ const form = document.querySelector("#listing-form");
 const list = document.querySelector("#listings");
 
 const timedFetch = (url, options = {}) =>
-  fetch(url, { ...options, signal: AbortSignal.timeout(5000) });
+  fetch(url, { ...options, signal: AbortSignal.timeout(10000) });
 
 const fetchJSON = async (url, options) => {
   let response;

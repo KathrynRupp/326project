@@ -73,9 +73,11 @@ The next feature is very similar to the first, but the major difference is that 
          |                            |            |                                 |                        |
          |               +------------v----------+ |    +---------+       +----------v----------+             |
          |               |     repositories/     | +----+result.js|       |   repositories/     |             |
-         |               | listingsRepository.js |      +---------+       |requestsRepository.js|             |
-         |               +-----------------------+                        +---------------------+             |
-         |                                                                                                    |
+         |               | listingsRepository.js | |    +---------+       |requestsRepository.js|             |
+         |               +-----------------------+ |                      +---------------------+             |
+         |                                         |    +----------------------------+                        |
+         |                                         +----+tests/listingService.test.js|                        |
+         |                                              +----------------------------+                        |
          |                                           +------------------+                                     |
          +------------------------------------------>| public/style.css |<------------------------------------+
                                                      +------------------+
@@ -99,9 +101,16 @@ One design decision I made was to put validation in requestsService.js instead o
 
 ### Nathan Ho
 
+#### Sprint 2
+
 I followed the units approach without weighing anything. One decision I chose to take was to add a dropdown menu I modified from MDN here: (https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/select), instead of the standard free-text entry we've been practicing in class.
 The error message sent back when I was first testing the program was vague for me, "Your listing was not saved. title, name of lister, and correct category are required." I had assumed that my code was failing somewhere like having a typo, but I just didn't add a valid field for the category.
 Adding the field was a bit more work than doing the standard free-text we've done in class, but it makes the program easier to use for people who haven't looked at the code, especially when the said categories aren't listed anywhere within the user interface. It does make it more tedious to go back and add another category every single time you want to incorporate a different category into the code, but I think the programs ease of use with a drop down menu outweighs that, as well as the "other" category is a catch all for categories not listed, so we wouldn't even need to add new categories.
+
+#### Sprint 3
+
+I followed the units approach without weighing anything. I was in charge of doing the mock tests for the listings services. One decision I made was to change my code back in sprint 2 to incorporate strictly white spaces failing the test as well. I decided to do this, as a plain white space is basically the same as an empty entry.
+Although I could've chosen to allow just white spaces, I decided against it, as it doesn't really follow our programs structure well. A strictly white space is giving zero information about the field, so the listing would be less comprehensible. Say you put a listing for an item under the category "other". Without the title, what are you trying to list for other people to borrow? Disallowing the use of white spaces just makes more sense, and allowing it doesn't really provide anything other than giving the user more freedom with their inputs.
 
 ### Xuan Thien Bui
 

@@ -4,12 +4,12 @@
   "description": "| Name           | GitHub Username  | | -------------- | ---------------- | | Kathryn Rupp   | KathrynRupp      | | Nathan Ho      | nathanho06092006 | | Anika Mukka    | anika-mukka      | | Xuan Thien Bui | thien952006      |",
   "main": "server.js",
   "scripts": {
-  "test": "node --experimental-vm-modules node_modules/.bin/jest",
-  "build:css": "tailwindcss -i ./src/input.css -o ./public/style.css",
-  "watch:css": "tailwindcss -i ./src/input.css -o ./public/style.css --watch",
-  "prestart": "npm run build:css",
-  "start": "node server.js"
-},
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "build:css": "tailwindcss -i ./src/input.css -o ./public/style.css",
+    "watch:css": "tailwindcss -i ./src/input.css -o ./public/style.css --watch",
+    "prestart": "npm run build:css",
+    "start": "node server.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KathrynRupp/326project.git"
