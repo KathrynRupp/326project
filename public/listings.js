@@ -46,6 +46,7 @@ const makeButton = (className, label) => {
 
 const buildItem = (listing) => {
   const item = document.createElement("li");
+  item.className = "card flex flex-wrap items-center gap-2";
   item.dataset.id = listing.id;
   item.dataset.title = listing.title;
   item.dataset.category = listing.category;
@@ -53,16 +54,17 @@ const buildItem = (listing) => {
   item.dataset.listerName = listing.listerName;
 
   const display = document.createElement("span");
-  display.className = "listing-display";
+  display.className =
+    "listing-display basis-full min-w-0 break-words text-sm sm:flex-1 sm:basis-0";
   fillDisplay(display, listing);
 
-  const deleteBtn = makeButton("delete-btn", "Delete");
+  const deleteBtn = makeButton("delete-btn btn-delete", "Delete");
   deleteBtn.setAttribute("hx-delete", `/listings/${listing.id}`);
   deleteBtn.setAttribute("hx-target", "closest li");
   deleteBtn.setAttribute("hx-swap", "outerHTML");
   deleteBtn.setAttribute("hx-confirm", "Delete this listing?");
 
-  item.append(display, makeButton("edit-btn", "Edit"), deleteBtn);
+  item.append(display, makeButton("edit-btn btn-edit", "Edit"), deleteBtn);
   return item;
 };
 
@@ -71,6 +73,7 @@ const makeInput = (name, value) => {
   input.type = "text";
   input.name = name;
   input.value = value;
+  input.className = "form-input";
   return input;
 };
 
@@ -105,17 +108,19 @@ const startEdit = (item) => {
   const buttons = item.querySelectorAll(".edit-btn, .delete-btn");
 
   const editForm = document.createElement("form");
-  editForm.className = "edit-form";
+  editForm.className =
+    "edit-form flex basis-full flex-col gap-2 sm:flex-row sm:items-center";
   const save = document.createElement("button");
   save.type = "submit";
   save.textContent = "Save";
+  save.className = "btn-primary";
   editForm.append(
     makeInput("title", item.dataset.title),
     makeInput("category", item.dataset.category),
     makeInput("description", item.dataset.description),
     makeInput("listerName", item.dataset.listerName),
     save,
-    makeButton("cancel-btn", "Cancel"),
+    makeButton("cancel-btn btn-edit", "Cancel"),
   );
 
   display.replaceWith(editForm);

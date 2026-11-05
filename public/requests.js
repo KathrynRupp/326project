@@ -46,10 +46,11 @@ const fillDisplay = (display, request) => {
 
 const buildItem = (request) => {
   const item = document.createElement("li");
+  item.className = "card";
   item.dataset.id = request._id;
 
   const display = document.createElement("span");
-  display.className = "request-display";
+  display.className = "request-display block break-words text-sm leading-relaxed";
   fillDisplay(display, request);
 
   item.append(display);
@@ -70,7 +71,7 @@ form.addEventListener("submit", async (event) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(request),
     });
-    // The server lists newest first, so new requests go on top.
+    // our serrver lists newest first, so new requests go on top
     list.prepend(buildItem(saved));
     form.reset();
   } catch (error) {

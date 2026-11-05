@@ -2,18 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Listings</title>
     <link rel="stylesheet" href="/style.css" />
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
   </head>
 
-  <body>
+  <body class="min-h-screen bg-slate-50 text-slate-800">
     <%- include('partials/header') %>
-    <h2>Listings</h2>
-    <main>
-      <form id="listing-form">
-        <input type="text" name="title" placeholder="Title" />
-        <select name="category">
+    <main class="mx-auto max-w-5xl px-4 py-8">
+      <h2 class="mb-4 text-2xl font-semibold text-slate-900">Listings</h2>
+      <form id="listing-form" class="card grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <input class="form-input" type="text" name="title" placeholder="Title" />
+        <select class="form-input" name="category">
           <option value="">Choose a category</option>
           <option value="calculators">Calculator</option>
           <option value="textbooks">Textbooks</option>
@@ -21,20 +22,17 @@
           <option value="kitchen">Kitchen</option>
           <option value="other">Other</option>
         </select>
-
-
-
-        <input type="text" name="description" placeholder="Description" />
-        <input type="text" name="listerName" placeholder="Your Name" />
-        <button type="submit">Add Listing</button>
+        <input class="form-input" type="text" name="description" placeholder="Description" />
+        <input class="form-input" type="text" name="listerName" placeholder="Your Name" />
+        <button class="btn-primary" type="submit">Add Listing</button>
       </form>
-      <ul id="listings">
+      <ul id="listings" class="mt-6 grid grid-cols-1 gap-3">
         <% listings.forEach((listing) => { %>
-          <li data-id="<%= listing.id %>" data-title="<%= listing.title %>" data-category="<%= listing.category %>" data-description="<%= listing.description %>" data-lister-name="<%= listing.listerName %>">
-            <span class="listing-display"><strong><%= listing.title %>:</strong>  (<%= listing.category %>) <%= listing.description %> listed by <%= listing.listerName %></span>
-            <button class="edit-btn" type="button">Edit</button>
+          <li class="card flex flex-wrap items-center gap-2" data-id="<%= listing.id %>" data-title="<%= listing.title %>" data-category="<%= listing.category %>" data-description="<%= listing.description %>" data-lister-name="<%= listing.listerName %>">
+            <span class="listing-display basis-full min-w-0 break-words text-sm sm:flex-1 sm:basis-0"><strong><%= listing.title %>:</strong>  (<%= listing.category %>) <%= listing.description %> listed by <%= listing.listerName %></span>
+            <button class="edit-btn btn-edit" type="button">Edit</button>
             <button
-              class="delete-btn"
+              class="delete-btn btn-delete"
               type="button"
               hx-delete="/listings/<%= listing.id %>"
               hx-target="closest li"
@@ -49,3 +47,4 @@
     <script src="/listings.js" defer></script>
   </body>
 </html>
+
