@@ -4,7 +4,7 @@ jest.unstable_mockModule("../repositories/listingsRepository.js", () => ({
   isValidId: jest.fn(() => true),
   getAll: jest.fn(),
   findById: jest.fn(),
-  create: jest.fn((data) => ({ _id: "fake-id", ...data })),
+  create: jest.fn((data) => ({ _id: "fake_id", ...data })),
   updateById: jest.fn(),
   removeById: jest.fn(),
 }));
@@ -23,7 +23,7 @@ test("createListing rejects a missing title", async () => {
   expect(result.error.status).toBe(400);
 });
 
-test("createListing rejects a strictly whitespace title", async () => {
+test("createListing rejects a whitespace-only title", async () => {
   const result = await createListing({
     title: " ",
     listerName: "John Doe",
@@ -45,7 +45,7 @@ test("createListing rejects a missing lister name", async () => {
   expect(result.error.status).toBe(400);
 });
 
-test("createListing rejects a strictly whitespace lister name", async () => {
+test("createListing rejects a whitespace-only lister name", async () => {
   const result = await createListing({
     title: "some title",
     listerName: " ",
@@ -67,7 +67,7 @@ test("createListing rejects an empty category (dropdown box wasn't used)", async
   expect(result.error.status).toBe(400);
 });
 
-test("createListing saves a valid listing and returns it's DTO", async () => {
+test("createListing saves a valid listing and returns its DTO", async () => {
   const result = await createListing({
     title: "some title",
     listerName: "John Doe",
@@ -79,12 +79,12 @@ test("createListing saves a valid listing and returns it's DTO", async () => {
     title: "some title",
     listerName: "John Doe",
     description: "some description",
-    id: "fake-id",
+    id: "fake_id",
     category: "other",
   });
 });
 
-test("updateListing fails given a nonexistent listing ", async () => {
+test("deleteListing fails when given a nonexistent listing ", async () => {
   const tmp = await createListing({
     title: "some title",
     listerName: "John Doe",
@@ -97,7 +97,7 @@ test("updateListing fails given a nonexistent listing ", async () => {
   expect(res.error.status).toBe(404);
 });
 
-test("editListing fails given a nonexistent listing ", async () => {
+test("updateListing fails given a nonexistent listing ", async () => {
   const tmp = await createListing({
     title: "some title",
     listerName: "John Doe",
