@@ -1,14 +1,14 @@
 import {jest} from "@jest/globals";
 
 jest.unstable_mockModule("../repositories/requestsRepository.js",()=>({
-  create:jest.fn((data)=>({_id:"fake_id",...data})),
+  create:jest.fn((data)=>({_id:"fake-id",...data})),
   findAll:jest.fn(),
   findById:jest.fn(),
   removeById:jest.fn(),
 }));
 const repo=await import("../repositories/requestsRepository.js");
 const {createRequest,getAllRequests,getRequestById,deleteRequest}=await import("../services/requestsService.js");
-const validInput={
+const validRequest={
   title:"Calculus",
   requesterName:"Bob",
   description: "Calculus I",
@@ -73,6 +73,7 @@ test("createRequest saves a valid request and return it", async()=>{
     requesterName:"Bob",
     description: "Calculus I",
     category:"textbooks",
+    neededBy:undefined,
   });
 });
 test("createRequest trims text before saving", async()=>{
@@ -104,7 +105,7 @@ test("getAllRequests returns the repository's list", async()=>{
   expect(repo.findAll).toHaveBeenCalledTimes(1);
 });
 test("getRequestById returns an existing request", async()=>{
-  repo.findById.mockResolvedVALUE({_id:"1", title:"Calculus"});
+  repo.findById.mockResolvedValue({_id:"1", title:"Calculus"});
   const res=await getRequestById("1");
   expect(repo.findById).toHaveBeenCalledWith("1");
   expect(res).toEqual({_id:"1",title:"Calculus"});
