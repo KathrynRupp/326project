@@ -130,8 +130,8 @@ Although I could've chosen to allow just white spaces, I decided against it, as 
 #### Sprint 2
 
 My design decision was to split views into partials. I put the site header and navigation in one file, views/partials/header.ejs, and include it from each page with <%- include('partials/header') %>. The alternative was to paste the header markup directly into listings.ejs, requests.ejs, and home.ejs. However, I think the partial is better because the navigation is defined once.
-####Sprint 3
-I was responsible for writing tests for requests services. My design decision was replace the repository with jest.unstable_mockModule, so requestsService run against fake create, findById, and removeById functions. The alternative way was to test against a real MongoDB. I think my way (mocking) is better because the rules tested are all in the services, and none of them needs a database to run.
+#### Sprint 3
+I was responsible for writing tests for requests services. My design decision was replace the repository with jest.unstable_mockModule, so requestsService run against fake create, findById, and removeById functions. The alternative way was to test against a real MongoDB. I think my way (mocking) is better because the rules tested are all in the services, and none of them needs a database to run. On the other hand, testing against a real MongoDB would need a database setup. This may cause slower tests and a failed test suite for anyone who has not started it.
 
 ## Sprint 3 Changes
 
