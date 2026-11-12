@@ -122,15 +122,18 @@ Adding the field was a bit more work than doing the standard free-text we've don
 
 #### Sprint 3
 
-I followed the units approach without weighing anything. I was in charge of doing the mock tests for the listings services. One decision I made was to change my code back in sprint 2 to incorporate strictly white spaces failing the test as well. I decided to do this, as a plain white space is basically the same as an empty entry.
-Although I could've chosen to allow just white spaces, I decided against it, as it doesn't really follow our programs structure well. A strictly white space is giving zero information about the field, so the listing would be less comprehensible. Say you put a listing for an item under the category "other". Without the title, what are you trying to list for other people to borrow? Disallowing the use of white spaces just makes more sense, and allowing it doesn't really provide anything other than giving the user more freedom with their inputs.
+I followed the units approach without weighing anything. I was in charge of doing the mock tests for the listings services.
+
+One decision I made was to trim the whitespace in the service layer instead of doing it within the controller. This ensures that the data being handed to the server is always clean and formatted, as every single input has to go through the service layer, so it makes sense to clean the data within the service, instead of repeatedly trimming the data in the each controller, which would cause a lot of duplicated code. This also ensures that the code passes onto the database will always be properly formatted
 
 ### Xuan Thien Bui
 
 #### Sprint 2
 
 My design decision was to split views into partials. I put the site header and navigation in one file, views/partials/header.ejs, and include it from each page with <%- include('partials/header') %>. The alternative was to paste the header markup directly into listings.ejs, requests.ejs, and home.ejs. However, I think the partial is better because the navigation is defined once.
+
 #### Sprint 3
+
 I was responsible for writing tests for requests services. My design decision was replace the repository with jest.unstable_mockModule, so requestsService run against fake create, findById, and removeById functions. The alternative way was to test against a real MongoDB. I think my way (mocking) is better because the rules tested are all in the services, and none of them needs a database to run. On the other hand, testing against a real MongoDB would need a database setup. This may cause slower tests and a failed test suite for anyone who has not started it.
 
 ## Sprint 3 Changes
