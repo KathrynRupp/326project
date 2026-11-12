@@ -1,4 +1,4 @@
-import { jest } from "@jest/globals";
+import { expect, jest } from "@jest/globals";
 
 jest.unstable_mockModule("../repositories/listingsRepository.js", () => ({
   isValidId: jest.fn(() => true),
@@ -8,6 +8,8 @@ jest.unstable_mockModule("../repositories/listingsRepository.js", () => ({
   updateById: jest.fn(),
   removeById: jest.fn(),
 }));
+
+const repo = await import("../repositories/listingsRepository.js");
 
 const { createListing, deleteListing, updateListing } =
   await import("../services/listingsService.js");
@@ -113,4 +115,34 @@ test("updateListing fails given a nonexistent listing ", async () => {
   });
   expect(res.ok).toBe(false);
   expect(res.error.status).toBe(404);
+});
+
+test("updateListing with a bad listerName update expects 400", async () => {
+  repo.findById.mockResolvedValue({
+    id: "1",
+    title: "frying pan",
+    listerName: "John Doe",
+    description: "some description",
+    category: "other",
+  });
+
+  const res = await updateListing("1", { listerName: "" });
+
+  expect(res.ok).toBe(false);
+  expect(res.error.status).toBe(400);
+});
+
+test("updateListing with a bad title update expects 400", async () => {
+  repo.findById.mockResolvedValue({
+    id: "1",
+    title: "frying pan",
+    listerName: "John Doe",
+    description: "some description",
+    category: "other",
+  });
+
+  const res = await updateListing("1", { title: "" });
+
+  expect(res.ok).toBe(false);
+  expect(res.error.status).toBe(400);
 });

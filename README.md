@@ -29,6 +29,14 @@ Our project domain is a borrowing forum for students. In this forum, students ca
   - The listings page: "http://localhost:3000/listings"
   - The requests page: "http://localhost:3000/requests"
 
+## Running the Tests
+
+- Run `npm test` from the "326Project" folder. The tests use mocks, so MongoDB does not need to be running.
+- The tests live in the `__tests__/` folder in two files:
+  - `listingsService.test.js` covers the listings service rules (required fields, whitespace-only input, valid category)
+  - `requestsService.test.js` covers the requests service rules (required fields, valid category, valid needed-by date)
+- Both files replace the repository with `jest.unstable_mockModule`, so the service rules are tested without a real database.
+
 ## Features:
 
 ### The Listings Page
@@ -38,17 +46,33 @@ The first feature we created was the listings feature. This page is meant to be 
 - "http://localhost:3000/listings" is where you can see all the listings, status code 200
 - Add a new listing with the add button (all fields must be added except the description, which is optional); returns a status code 201 and the updated page with the listing
 - Update a listing with the edit button; returns a status code 200 with the updated page with the updated listing
-- Delete a listing with the delete button; returns a status code 204 with the updated page without that listing
+- Delete a listing with the delete button (an HTMX interaction); returns a status code 200 and the listing is removed from the page
 
 ### The Requests Page
 
-The next feature is very similar to the first, but the major difference is that people are posting to request an item they are seeking out. You can GET, POST, and DELETE from the page:
+The next feature is very similar to the first, but the major difference is that people are posting to request an item they are seeking out. You can GET and POST from the page:
 
 - "http://localhost:3000/requests" is where you can see all of the requests, status code 200
 - Add a new request with the form (all fields must be added except the description and needed by date, which are optional); returns a status code 201 and the updated page with the request. If something required is missing or invalid, the server returns a 400 error.
-- Delete a request with the delete button; returns a status code 204 and the request disappears from the page. Deleting a request that does not exist returns a 404.
 
 ## System Diagram
+
+Let the following structure symbolize
+Item 1 being connected to item 3,
+Item 2 being connected to item 4
+
+```text
+            +--------+
+            | Item 2 |
+            +----v---+
++--------+       |        +--------+
+| Item 1 |-------|--------| Item 3 |
++--------+       |        +--------+
+                 |
+            +----^---+
+            | Item 4 |
+            +--------+
+```
 
 ```text
                                                       +------------+
@@ -60,24 +84,52 @@ The next feature is very similar to the first, but the major difference is that 
                            | routes/listings.js |   | routes/pages.js |  |routes/requests.js |
                            +----------+---------+   +--------+--------+  +----------+--------+
                                       |                      |                      |
-                                      |                 +----v-----+                |
-         +----------------+-----------v------------+    |public/   |    +-----------v-----------+------------+
-+--------v---------+      |     controllers/       |    | style.css|    |   controllers/        |    +-------v-----------+
-|views/listings.ejs|      | listingsController.js  |    +----------+    | requestsController.js |    |views/requests.ejs |
-+--------+---------+      +-----------+------------+                    +------------+----------+    +-------+-----------+
-         |                            |                                              |                       |
-+--------v---------+       +----------v---------+    +--------------+     +----------v---------+      +------v-----------+
-|public/listings.js|       |      services/     |    |dtos/         |     |    services/       |      |public/requests.js|
-+--------+---------+       | listingsService.js <--+-+listingsDto.js|     | requestsService.js |      +-------+----------+
-         |                 +----------+---------+  | +--------------+     +----------+---------+              |
+                                      |             +--------v-------+              |
+                                      |             | views/home.ejs |              |
+                                      |             +--------+-------+              |
+                                      |                      |                      |
+                                      |       +--------------v------------+         |
+    +---------------------------------|-------| views/partials/header.ejs |---------|-------------------------------------------+
+    |                                 |       +---------------------------+         |                                           |
+    |                                 |                                             |                                           |
+    |                                 |                                             |                                           |
+    |                                 |            +--------------------+           |                                           |
+    |                                 |            |  asyncHandler.js   |           |                                           |
+    |                                 |            +--------------------+           |                                           |
+    |                                 |            |                    |           |                                           |
+    |    +----------------+-----------v------------+                    +-----------v-----------+----------------------+        |
++---^----v---------+      |     controllers/       |                    |   controllers/        |              +-------v--------^--+
+|views/listings.ejs|      | listingsController.js  |                    | requestsController.js |              |views/requests.ejs |
++--------+---------+      +-----------+------------+                    +------------+----------+              +-------+-----------+
+         |                            |                                              |                                 |
++--------v---------+       +----------v---------+    +--------------+     +----------v---------+               +-------v----------+
+|public/listings.js|       |      services/     |    |dtos/         |     |    services/       |               |public/requests.js|
++--------+---------+       | listingsService.js <--+-+listingsDto.js|     | requestsService.js +---+           +-------+----------+
+         |                 +----------+---------+  | +--------------+     +----------+---------+   |                   +-----------------+
+         |                            |            |                                 |             |                                     |
+         |                            |            |                                 |    +--------+--------------------------+          |
+         |                            |            |                                 |    | __tests__/requestsService.test.js |          |
+         |                            |            |                                 |    |     REPOSITORIES MOCKED WITH:     |          |
+         |                            |            |                                 |    |     jest.unstable_mockModule      |          |
+         |                            |            |                                 |    +-----------------------------------+          |
+         |                            |            |                                 |                        +--------------------------=
          |                            |            |                                 |                        |
          |               +------------v----------+ |    +---------+       +----------v----------+             |
          |               |     repositories/     | +----+result.js|       |   repositories/     |             |
          |               | listingsRepository.js | |    +---------+       |requestsRepository.js|             |
-         |               +-----------------------+ |                      +---------------------+             |
-         |                                         |    +----------------------------+                        |
-         |                                         +----+tests/listingService.test.js|                        |
-         |                                              +----------------------------+                        |
+         |               +------------+----------+ |                      +------------------+--+             |
+         |                            |            |    +----------------------------------+ |                |
+         |                            |            |    | __tests__/listingService.test.js | |                |
+         |                            |            +----+      REPOSITORIES MOCKED WITH:   | |                |
+                                                        |      jest.unstable_mockModule    | |                |
+         |                            |                 +----------------------------------+ |                |
+         |                            |                                                      |                |
+         |                        +---v------------------------------------------------------v---+            |
+         |                        |                           MongoDB                            |            |
+         |                        +--------------------------------------------------------------+            |
+         |                                                                                                    |
+         |                                                                                                    |
+         |                                                                                                    |
          |                                           +------------------+                                     |
          +------------------------------------------>| public/style.css |<------------------------------------+
                                                      +------------------+
@@ -93,7 +145,7 @@ One design decision I made was to include a validation function in the listingsR
 
 #### Sprint 3
 
-I followed the unit's approach to creating the HTMX interaction for the delete button in the listings route. An alternative way of making the delete button function would be what we did before: a click listener that called fetchJSON with DELETE and then removed the list item from the DOM by hand. The HTMX version removes hand-written fetch and DOM update code, which takes less code and keeps the logic with the button(something the alternative would have cost us). This version is better for our app because it simplifies the logic that the button uses.
+I followed the unit's approach to creating the HTMX interaction for the delete button in the listings route. An alternative would be what we did before: a click listener in public/listings.js that called fetchJSON with DELETE and then removed the list item from the DOM by hand. I think the HTMX version is better for our app because the delete button now carries its own URL (hx-delete) and confirm test (hx-confirm) as attributes. Since listings.js also builds new cards in the browser, a listing added without a page reload works as soon as htmx.process sees it, and the server-rendered and browser-built cards use the same button markup.
 
 ### Anika Mukka
 
@@ -101,7 +153,8 @@ I followed the unit's approach to creating the HTMX interaction for the delete b
 
 One design decision I made was to put validation in requestsService.js instead of putting it only in the controller. The service checks that title and requesterName are present, that category is one of the allowed values, and that neededBy is a real date and throws a 400 error with an error message if any check fails. This was the way we did it in class, so I just followed the same procedure here. The alternative is to do these checks in requestsController.js, where the request body is read. The controller handles the HTTP part of this project, so putting the validation there would mix business rules in with code that deals with req and res. If anything else ever creates a request, the rules would have to be copied, and testing a rule would mean building a fake req and res first. But if the rules are in the service layer, every caller gets them automatically, and a test can just call the function with a bad input and check that it throws an error.
 
-### Sprint 3
+#### Sprint 3
+
 My main task was to implement Tailwind to our sprint where I followed unit 15's approach. One decision I made for the Tailwind restyle was to build the repeated patterns with @apply in src/input.css, instead of writing the full list of utility classes on every element. The alternative to this is to repeat the utilities inline everywhere. This would have been much more difficult since listings.js and requests.js build our cards in the browser so every change would have meant editing the same long class strings in the views and in the scripts, and one missed spot would make newly added items look different from the ones the server renders. With the named class (what I implemented) it all lives in one place and the views and the scripts say card. This is better for our project since it is all in src/input.css and stays more organized.
 
 ### Nathan Ho
@@ -114,15 +167,22 @@ Adding the field was a bit more work than doing the standard free-text we've don
 
 #### Sprint 3
 
-I followed the units approach without weighing anything. I was in charge of doing the mock tests for the listings services. One decision I made was to change my code back in sprint 2 to incorporate strictly white spaces failing the test as well. I decided to do this, as a plain white space is basically the same as an empty entry.
-Although I could've chosen to allow just white spaces, I decided against it, as it doesn't really follow our programs structure well. A strictly white space is giving zero information about the field, so the listing would be less comprehensible. Say you put a listing for an item under the category "other". Without the title, what are you trying to list for other people to borrow? Disallowing the use of white spaces just makes more sense, and allowing it doesn't really provide anything other than giving the user more freedom with their inputs.
+I followed the units approach without weighing anything. I was in charge of doing the mock tests for the listings services.
+
+One decision I made was to trim the whitespace in the service layer instead of doing it within the controller. This ensures that the data being handed to the server is always clean and formatted, as every single input has to go through the service layer, so it makes sense to clean the data within the service, instead of repeatedly trimming the data in the each controller, which would cause a lot of duplicated code. This also ensures that the code passes onto the database will always be properly formatted
 
 ### Xuan Thien Bui
-####Sprint 2
+
+#### Sprint 2
+
 My design decision was to split views into partials. I put the site header and navigation in one file, views/partials/header.ejs, and include it from each page with <%- include('partials/header') %>. The alternative was to paste the header markup directly into listings.ejs, requests.ejs, and home.ejs. However, I think the partial is better because the navigation is defined once.
-####Sprint 3
-I was responsible for writing tests for requests services. My design decision was replace the repository with jest.unstable_mockModule, so requestsService run against fake create, findById, and removeById functions. The alternative way was to test against a real MongoDB. I think my way (mocking) is better because the rules tested  are all in the services, and none of them needs a database to run.
+
+#### Sprint 3
+
+I was responsible for writing tests for requests services. My design decision was replace the repository with jest.unstable_mockModule, so requestsService run against fake create, findById, and removeById functions. The alternative way was to test against a real MongoDB. I think my way (mocking) is better because the rules tested are all in the services, and none of them needs a database to run. On the other hand, testing against a real MongoDB would need a database setup. This may cause slower tests and a failed test suite for anyone who has not started it.
 
 ## Sprint 3 Changes
 
-We did not have to change the repository to use MongoDB because we chose to implement that during Sprint 2. We turned the delete button on the listings page into an HTMX interaction. The shared header and the home, listings, and requests pages are styled with Tailwind utility classes and are responsive. The forms stack in one column on a phone and spread into rows on wider screens.
+We did not have to change the repository to use MongoDB because we chose to implement that during Sprint 2. This means each of the /requests and /listings repositories have their own respective MongoDB collection. Additionally, both the listings and requests services have tests (see Running the Tests).
+
+We turned the delete button on the listings page into an HTMX interaction. The shared header and the home, listings, and requests pages are styled with Tailwind utility classes and are responsive. The forms stack in one column on a phone and spread into rows on wider screens.
