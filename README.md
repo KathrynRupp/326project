@@ -108,7 +108,7 @@ Item 2 being connected to item 4
          |                 +----------+---------+  | +--------------+     +----------+---------+   |                   +-----------------+
          |                            |            |                                 |             |                                     |
          |                            |            |                                 |    +--------+--------------------------+          |
-         |                            |            |                                 |    | __tests__/requestsService.test.js |          |
+         |                            |            |                                 |    | __tests__/requestService.test.js  |          |
          |                            |            |                                 |    |     REPOSITORIES MOCKED WITH:     |          |
          |                            |            |                                 |    |     jest.unstable_mockModule      |          |
          |                            |            |                                 |    +-----------------------------------+          |
