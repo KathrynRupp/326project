@@ -33,8 +33,8 @@ Our project domain is a borrowing forum for students. In this forum, students ca
 
 - Run `npm test` from the "326Project" folder. The tests use mocks, so MongoDB does not need to be running.
 - The tests live in the `__tests__/` folder in two files:
-  - `listingsService.test.js` covers the listings service rules (required fields, whitespace-only input, valid category)
-  - `requestsService.test.js` covers the requests service rules (required fields, valid category, valid needed-by date)
+  - `listingService.test.js` covers the listings service rules (required fields, whitespace-only input, valid category)
+  - `requestService.test.js` covers the requests service rules (required fields, valid category, valid needed-by date)
 - Both files replace the repository with `jest.unstable_mockModule`, so the service rules are tested without a real database.
 
 ## Features:
@@ -108,7 +108,7 @@ Item 2 being connected to item 4
          |                 +----------+---------+  | +--------------+     +----------+---------+   |                   +-----------------+
          |                            |            |                                 |             |                                     |
          |                            |            |                                 |    +--------+--------------------------+          |
-         |                            |            |                                 |    | __tests__/requestsService.test.js |          |
+         |                            |            |                                 |    | __tests__/requestService.test.js  |          |
          |                            |            |                                 |    |     REPOSITORIES MOCKED WITH:     |          |
          |                            |            |                                 |    |     jest.unstable_mockModule      |          |
          |                            |            |                                 |    +-----------------------------------+          |
