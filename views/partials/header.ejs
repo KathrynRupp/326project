@@ -3,9 +3,18 @@
     <h1 class="text-xl font-bold text-slate-900 sm:text-2xl">
       <a href="/">Student Borrowing Forum </a>
     </h1>
-    <nav class="flex gap-2 text-sm font-medium">
+    <nav class="flex flex-wrap items-center gap-2 text-sm font-medium">
       <a class="rounded-md px-3 py-1.5 text-sky-700 hover:bg-sky-50" href="/listings">Listings</a>
       <a class="rounded-md px-3 py-1.5 text-sky-700 hover:bg-sky-50" href="/requests">Requests</a>
+      <% if (locals.user) { %>
+        <span class="px-2 text-slate-700">Signed in as <%= user.name %></span>
+        <form method="POST" action="/logout">
+          <button type="submit" class="btn-edit">Log out</button>
+        </form>
+      <% } else { %>
+        <a class="rounded-md px-3 py-1.5 text-sky-700 hover:bg-sky-50" href="/login">Log in</a>
+        <a class="rounded-md px-3 py-1.5 text-sky-700 hover:bg-sky-50" href="/signup">Sign up</a>
+      <% } %>
     </nav>
   </div>
 </header>

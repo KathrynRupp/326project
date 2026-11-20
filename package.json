@@ -8,7 +8,8 @@
     "build:css": "tailwindcss -i ./src/input.css -o ./public/style.css",
     "watch:css": "tailwindcss -i ./src/input.css -o ./public/style.css --watch",
     "prestart": "npm run build:css",
-    "start": "node server.js"
+    "start": "node server.js",
+    "make-admin": "node scripts/makeAdmin.js"
   },
   "repository": {
     "type": "git",
@@ -24,8 +25,12 @@
   "homepage": "https://github.com/KathrynRupp/326project#readme",
   "dependencies": {
     "@tailwindcss/cli": "^4.3.4",
+    "bcrypt": "^6.0.0",
+    "connect-mongo": "^6.0.0",
+    "dotenv": "^18.0.10",
     "ejs": "^7.0.2",
     "express": "^5.2.1",
+    "express-session": "^1.19.0",
     "mongoose": "^9.11.2",
     "tailwindcss": "^4.3.4"
   },
