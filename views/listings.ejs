@@ -29,7 +29,7 @@
       <p id="status" class="sr-only" role="status" aria-live="polite"></p>
       <ul id="listings" class="mt-6 grid grid-cols-1 gap-3">
         <% listings.forEach((listing) => { %>
-          <li class="card flex flex-wrap items-center gap-2" data-id="<%= listing.id %>" data-title="<%= listing.title %>" data-category="<%= listing.category %>" data-description="<%= listing.description %>" data-lister-name="<%= listing.listerName %>">
+          <li class="card flex flex-wrap items-center gap-2" data-id="<%= listing.id %>" data-title="<%= listing.title %>" data-category="<%= listing.category %>" data-description="<%= listing.description || '' %>" data-lister-name="<%= listing.listerName %>">
             <span class="listing-display basis-full min-w-0 break-words text-sm sm:flex-1 sm:basis-0"><strong><%= listing.title %>:</strong>  (<%= listing.category %>) <%= listing.description %> listed by <%= listing.listerName %></span>
             <button class="edit-btn btn-edit" type="button" aria-label="Edit <%= listing.title %>">Edit</button>
             <button
