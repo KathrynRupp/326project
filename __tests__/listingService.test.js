@@ -188,3 +188,55 @@ test("updateListing with a bad title update expects 400", async () => {
   expect(res.ok).toBe(false);
   expect(res.error.status).toBe(400);
 });
+
+test("deleteListing rejects a non-owner", async () => {
+  repo.findById.mockResolvedValue({
+    id: "1",
+    title: "frying pan",
+    listerName: "John Doe",
+    description: "some description",
+    category: "other",
+    ownerId: "john",
+  });
+
+  const result = await deleteListing("1", jane);
+
+  expect(result.ok).toBe(false);
+  expect(result.error.status).toBe(403);
+});
+
+test("deleteListing accepts a owner", async () => {
+  repo.findById.mockResolvedValue({
+    id: "1",
+    title: "frying pan",
+    listerName: "John Doe",
+    description: "some description",
+    category: "other",
+    ownerId: "john",
+  });
+
+  const result = await deleteListing("1", john);
+
+  expect(result.ok).toBe(true);
+  expect(repo.removeById).toHaveBeenCalledWith("1");
+});
+
+test("deleteListing accepts a admin", async () => {
+  repo.findById.mockResolvedValue({
+    id: "1",
+    title: "frying pan",
+    listerName: "John Doe",
+    description: "some description",
+    category: "other",
+    ownerId: "john",
+  });
+
+  userRepo.findById.mockResolvedValue({
+    role: "admin",
+  });
+
+  const result = await deleteListing("1", admin);
+
+  expect(result.ok).toBe(true);
+  expect(repo.removeById).toHaveBeenCalledWith("1");
+});

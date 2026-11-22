@@ -8,7 +8,16 @@ jest.unstable_mockModule("../repositories/requestsRepository.js", () => ({
   updateById: jest.fn(),
   removeById: jest.fn(),
 }));
+
+jest.unstable_mockModule("../repositories/usersRepository.js", () => ({
+  findByEmail: jest.fn(),
+  findById: jest.fn(),
+  create: jest.fn(),
+}));
+
 const repo = await import("../repositories/requestsRepository.js");
+const userRepo = await import("../repositories/usersRepository.js");
+
 const { createRequest, getAllRequests, getRequestById, deleteRequest } =
   await import("../services/requestsService.js");
 const validRequest = {
@@ -149,5 +158,52 @@ test("deleteRequest fails given a request that doesn't exist", async () => {
 test("deleteRequest removes an existing request", async () => {
   repo.findById.mockResolvedValue({ _id: "1", ownerId: "bob" });
   await expect(deleteRequest("1", bob)).resolves.toBeUndefined();
+  expect(repo.removeById).toHaveBeenCalledWith("1");
+});
+
+test("deleteRequest rejects a non-owner", async () => {
+  repo.findById.mockResolvedValue({
+    id: "1",
+    title: "frying pan",
+    listerName: "John Doe",
+    description: "some description",
+    category: "other",
+    ownerId: "bob",
+  });
+
+  await expect(deleteRequest("1", bobbette)).rejects.toMatchObject({
+    status: 403,
+  });
+});
+
+test("deleteRequest accepts an owner", async () => {
+  repo.findById.mockResolvedValue({
+    id: "1",
+    title: "frying pan",
+    listerName: "John Doe",
+    description: "some description",
+    category: "other",
+    ownerId: "bob",
+  });
+
+  await expect(deleteRequest("1", bob)).resolves.toBeUndefined();
+  expect(repo.removeById).toHaveBeenCalledWith("1");
+});
+
+test("deleteRequest accepts an admin", async () => {
+  repo.findById.mockResolvedValue({
+    id: "1",
+    title: "frying pan",
+    listerName: "John Doe",
+    description: "some description",
+    category: "other",
+    ownerId: "bob",
+  });
+
+  userRepo.findById.mockResolvedValue({
+    role: "admin",
+  });
+
+  await expect(deleteRequest("1", admin)).resolves.toBeUndefined();
   expect(repo.removeById).toHaveBeenCalledWith("1");
 });
