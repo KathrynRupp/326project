@@ -7,6 +7,7 @@ const listingSchema = new mongoose.Schema(
     category: { type: String, required: true },
     description: { type: String, trim: true },
     listerName: { type: String, required: true, trim: true },
+    ownerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   },
   { timestamps: true },
 );

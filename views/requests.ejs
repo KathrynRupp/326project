@@ -14,6 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Requests</title>
     <link rel="stylesheet" href="/style.css"/>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
   </head>
   <body class="min-h-screen bg-slate-50 text-slate-800">
     <%- include('partials/header') %>
@@ -40,8 +41,21 @@
       <p id="status" class="sr-only" role="status" aria-live="polite"></p>
       <ul id="requests" class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <% requests.forEach((request) => { %>
-          <li class="card" data-id="<%= request._id %>">
-            <span class="request-display block break-words text-sm leading-relaxed"><strong><%= request.title %>:</strong> (<%= request.category %>)<% if (request.description) { %> <%= request.description %><% } %> requested by <%= request.requesterName %><% if (request.neededBy) { %>, needed by <%= formatDate(request.neededBy) %><% } %></span>
+          <li class="card flex flex-wrap items-center gap-2" data-id="<%= request._id %>" data-title="<%= request.title %>" data-category="<%= request.category %>" data-description="<%= request.description || '' %>" data-requester-name="<%= request.requesterName %>" data-needed-by="<%= request.neededBy ? request.neededBy.toISOString().slice(0, 10) : '' %>">
+            <span class="request-display basis-full min-w-0 break-words text-sm sm:flex-1 sm:basis-0"><strong><%= request.title %>:</strong> (<%= request.category %>)<% if (request.description) { %> <%= request.description %><% } %> requested by <%= request.requesterName %><% if (request.neededBy) { %>, needed by <%= formatDate(request.neededBy) %><% } %></span>
+
+            <button class="edit-btn btn-edit" type="button" aria-label="Edit <%= request.title %>">Edit</button>
+            <button
+              class="delete-btn btn-delete"
+              type="button"
+              aria-label="Delete <%= request.title %>"
+              hx-delete="/requests/<%= request._id %>"
+              hx-target="closest li"
+              hx-swap="outerHTML"
+              hx-confirm="Delete this request?">
+              Delete
+            </button>
+
           </li>
         <% }); %>
       </ul>

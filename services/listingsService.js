@@ -1,8 +1,16 @@
 import { Ok, Err } from "../result.js";
 import { toListingDto } from "../dtos/listingsDto.js";
 import * as repo from "../repositories/listingsRepository.js";
+import * as userRepository from "../repositories/usersRepository.js";
 
 const CATEGORIES = ["calculators", "textbooks", "clothing", "kitchen", "other"];
+
+//
+const isOwnerOrAdmin = async (entry, actorId) => {
+  if (entry.ownerId.toString() === actorId) return true;
+  const account = await userRepository.findById(actorId);
+  return account?.role === "admin";
+};
 
 //validate listing
 const validateListing = ({ title, listerName, description, category }) => {
@@ -22,16 +30,25 @@ export const getAllListings = async () =>
   (await repo.getAll()).map(toListingDto);
 
 //create a listing
-export const createListing = async (data) => {
+export const createListing = async (data, actor) => {
   const listing = validateListing(data);
   if (!listing.ok) return listing;
-  return Ok(toListingDto(await repo.create(listing.value)));
+  return Ok(
+    toListingDto(await repo.create({ ...listing.value, ownerId: actor.id })),
+  );
 };
 
 //update a listing by id
-export const updateListing = async (id, data) => {
+export const updateListing = async (id, data, actor) => {
   const existing = await repo.findById(id);
   if (!existing) return Err({ status: 404, message: "Entry not found" });
+
+  if (!(await isOwnerOrAdmin(existing, actor.id))) {
+    return Err({
+      status: 403,
+      message: "You do not have permission to modify this listing",
+    });
+  }
 
   const listing = validateListing(data);
   if (!listing.ok) return listing;
@@ -39,10 +56,17 @@ export const updateListing = async (id, data) => {
 };
 
 //delete a listing by id
-export const deleteListing = async (id) => {
+export const deleteListing = async (id, actor) => {
   const existing = await repo.findById(id);
   if (!existing) {
     return Err({ status: 404, message: "Listing not found" });
+  }
+
+  if (!(await isOwnerOrAdmin(existing, actor.id))) {
+    return Err({
+      status: 403,
+      message: "You do not have permission to delete this listing.",
+    });
   }
   await repo.removeById(id);
   return Ok(null);

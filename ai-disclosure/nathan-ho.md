@@ -15,3 +15,7 @@ I did not use AI for Sprint 2.
 ## Sprint 3
 
 I did not use AI for Sprint 3
+
+## Sprint 4
+
+I did not use AI for Sprint 4

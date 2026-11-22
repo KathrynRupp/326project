@@ -15,3 +15,5 @@ export async function updateRoleByEmail(email, role) {
     { returnDocument: "after", runValidators: true },
   ).lean();
 }
+
+export const findById = async (id) => User.findById(id).lean();

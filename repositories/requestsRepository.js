@@ -7,8 +7,13 @@ const requestSchema = new mongoose.Schema(
     description: { type: String, trim: true },
     neededBy: { type: Date },
     requesterName: { type: String, required: true, trim: true },
+    ownerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const RequestPost = mongoose.model("RequestPost", requestSchema);
@@ -30,3 +35,8 @@ export async function removeById(id) {
   if (!mongoose.isValidObjectId(id)) return null;
   return RequestPost.findByIdAndDelete(id).lean();
 }
+
+export const updateById = async (id, data) =>
+  RequestPost.findByIdAndUpdate(id, data, { new: true }).lean();
+
+export const isValidId = (id) => mongoose.isValidObjectId(id);
