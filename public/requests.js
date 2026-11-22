@@ -1,5 +1,13 @@
 const form=document.querySelector("#request-form");
 const list=document.querySelector("#requests");
+const status=document.querySelector("#status");
+
+const announce=(message)=>{
+  status.textContent="";
+  setTimeout(()=>{
+    status.textContent=message;
+  },50);
+};
 
 const timedFetch = (url, options = {}) =>
   fetch(url, { ...options, signal: AbortSignal.timeout(5000) });
@@ -74,9 +82,12 @@ form.addEventListener("submit", async (event) => {
     // our serrver lists newest first, so new requests go on top
     list.prepend(buildItem(saved));
     form.reset();
+    announce(`Request added: ${saved.title}.`);
+    button.disabled=false;
+    form.querySelector("[name=title]").focus();
   } catch (error) {
+    button.disabled=false;
+    button.focus();
     alert(`Your request was not saved. ${error.message}`);
-  } finally {
-    button.disabled = false;
   }
 });

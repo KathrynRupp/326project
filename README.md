@@ -181,6 +181,16 @@ My design decision was to split views into partials. I put the site header and n
 
 I was responsible for writing tests for requests services. My design decision was replace the repository with jest.unstable_mockModule, so requestsService run against fake create, findById, and removeById functions. The alternative way was to test against a real MongoDB. I think my way (mocking) is better because the rules tested are all in the services, and none of them needs a database to run. On the other hand, testing against a real MongoDB would need a database setup. This may cause slower tests and a failed test suite for anyone who has not started it.
 
+#### Sprint 4
+I was responsible for accessibility audit part. When a listing is deleted with HTMX, the row (and the button that had focus) is removed, so the browser drops keyboard focus to the top of the page. I fixed this in an htmx:beforeSwap handler that moves focus to the next row's Delete button, or the previous rows, or the page heading if the list is now empty, and announce the deletion in a live region. The alternative way is to always send focus to one fixed place after a delete, such as the Listings heading. I think my shipped version is better. Moving to neighbor row  is better because a keyboard user clearing out several listings wouldn't have to Tab through eight stops before reaching the list again after every delete.
+
+## Accessibility Audit
+| Found | Fix | How to check |
+| Category dropdowns had no accessible name, and text inputs relied on placeholders | Every input and select is wrapped in a label with sr-only text, including the edit form built in listings.js | Run an axe or Lighthouse scan: no missing-label errors |
+| Focus was lost to the top of the page after delete, edit, save, cancel, and add | Focus moves to the next row's Delete button (or the heading), the first field of the edit form, the row's Edit button, or the title field | Tab to Delete, press Enter, confirm: focus stays on the next row. Press Edit: focus is in the first field. Escape cancels |
+| Placeholder text was 3.05:1 | placeholder:text-slate-500 (4.76:1) | DevTools color picker on a placeholder |
+| Primary button and input focus rings were 1.67:1 and 1.33:1 | Darker ring with an offset (5.86:1) | Tab to Add Listing: a clear blue ring appears |
+| Edit and Delete buttons had no context for screen readers | aria-label with the item title | Inspect a button: aria-label is Delete <title> |
 ## Sprint 3 Changes
 
 We did not have to change the repository to use MongoDB because we chose to implement that during Sprint 2. This means each of the /requests and /listings repositories have their own respective MongoDB collection. Additionally, both the listings and requests services have tests (see Running the Tests).

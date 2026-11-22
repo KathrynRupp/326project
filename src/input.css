@@ -3,13 +3,13 @@
 
 @layer components {
   .form-input {
-    @apply w-full min-w-0 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-200;
+    @apply w-full min-w-0 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-slate-500 focus:border-sky-700 focus:outline-none focus:ring-1 focus:ring-sky-700;
   }
   .card {
     @apply rounded-lg border border-slate-200 bg-white p-4 shadow-sm;
   }
   .btn-primary {
-    @apply rounded-md bg-sky-700 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-300;
+    @apply rounded-md bg-sky-700 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700 focus-visible:ring-offset-2;
   }
   .btn-edit {
     @apply rounded-md border border-slate-300 px-3 py-1 text-sm hover:bg-slate-100;

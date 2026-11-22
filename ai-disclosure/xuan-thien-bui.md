@@ -6,3 +6,5 @@ I didn't use AI in sprint 1.
 I didn't use AI in sprint 2.
 ## Sprint 3
 I didn't use AI in sprint 3.
+## Sprint 4
+I didn't use AI in sprint 4.
