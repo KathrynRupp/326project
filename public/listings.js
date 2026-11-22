@@ -1,6 +1,13 @@
 const form = document.querySelector("#listing-form");
 const list = document.querySelector("#listings");
+const status = document.querySelector("#status");
 
+const announce=(message)=>{
+  status.textContent="";
+  setTimeout(()=>{
+    status.textContent=message;
+  },50);
+};
 const timedFetch = (url, options = {}) =>
   fetch(url, { ...options, signal: AbortSignal.timeout(10000) });
 
@@ -43,7 +50,10 @@ const makeButton = (className, label) => {
   button.textContent = label;
   return button;
 };
-
+const labelItemButtons=(item,title)=>{
+  item.querySelector(".edit-btn").setAttribute("aria-label", `Edit ${title}`);
+  item.querySelector(".delete-btn").setAttribute("aria-label", `Delete ${title}`);
+};
 const buildItem = (listing) => {
   const item = document.createElement("li");
   item.className = "card flex flex-wrap items-center gap-2";
@@ -65,16 +75,23 @@ const buildItem = (listing) => {
   deleteBtn.setAttribute("hx-confirm", "Delete this listing?");
 
   item.append(display, makeButton("edit-btn btn-edit", "Edit"), deleteBtn);
+  labelItemButtons(item,listing.title);
   return item;
 };
 
-const makeInput = (name, value) => {
+const makeField = (name, value, labelText) => {
+  const label=document.createElement("label");
+  label.className="min-w-0 sm:flex-1";
+  const text=document.createElement("span");
+  text.className="sr-only";
+  text.textContent=labelText;
   const input = document.createElement("input");
   input.type = "text";
   input.name = name;
   input.value = value;
   input.className = "form-input";
-  return input;
+  label.append(text,input);
+  return label;
 };
 
 form.addEventListener("submit", async (event) => {
@@ -96,10 +113,13 @@ form.addEventListener("submit", async (event) => {
     list.append(item);
     htmx.process(item);
     form.reset();
+    announce(`Listing added: ${saved.title}.`);
+    button.disabled=false;
+    form.querySelector("[name=title]").focus();
   } catch (error) {
-    alert(`Your listing was not saved. ${error.message}`);
-  } finally {
     button.disabled = false;
+    button.focus();
+    alert(`Your listing was not saved. ${error.message}`);
   }
 });
 
@@ -115,10 +135,10 @@ const startEdit = (item) => {
   save.textContent = "Save";
   save.className = "btn-primary";
   editForm.append(
-    makeInput("title", item.dataset.title),
-    makeInput("category", item.dataset.category),
-    makeInput("description", item.dataset.description),
-    makeInput("listerName", item.dataset.listerName),
+    makeField("title", item.dataset.title, "Title"),
+    makeField("category", item.dataset.category, "Category"),
+    makeField("description", item.dataset.description, "Description"),
+    makeField("listerName", item.dataset.listerName, "Your name"),
     save,
     makeButton("cancel-btn btn-edit", "Cancel"),
   );
@@ -127,12 +147,18 @@ const startEdit = (item) => {
   buttons.forEach((button) => {
     button.hidden = true;
   });
+  editForm.querySelector("input").focus();
 
-  editForm.querySelector(".cancel-btn").addEventListener("click", () => {
+  const closeEdit=()=>{
     editForm.replaceWith(display);
-    buttons.forEach((button) => {
-      button.hidden = false;
+    buttons.forEach((button)=>{
+      button.hidden=false;
     });
+    item.querySelector(".edit-btn").focus();
+  };
+  editForm.querySelector(".cancel-btn").addEventListener("click", closeEdit);
+  editForm.addEventListener("keydown", (event)=>{
+    if(event.key==="Escape") closeEdit();
   });
 
   editForm.addEventListener("submit", async (event) => {
@@ -153,11 +179,12 @@ const startEdit = (item) => {
       item.dataset.description = saved.description;
       item.dataset.listerName = saved.listerName;
       fillDisplay(display, saved);
-      editForm.replaceWith(display);
-      buttons.forEach((button) => {
-        button.hidden = false;
-      });
+      labelItemButtons(item,saved.title);
+      closeEdit();
+      announce(`Listing updated: ${saved.title}.`);
     } catch (error) {
+      save.disabled = false;
+      save.focus();
       alert(`Your changes were not saved. ${error.message}`);
     } finally {
       save.disabled = false;
@@ -169,4 +196,23 @@ list.addEventListener("click", async (event) => {
   if (event.target.matches(".edit-btn")) {
     startEdit(event.target.closest("li"));
   }
+});
+
+document.body.addEventListener("htmx:beforeSwap", (event)=>{
+  const row=event.detail.target;
+  if(!row.matches("#listings > li") || event.detail.xhr.status!==200) return;
+  const neighbor=row.nextElementSibling || row.previousElementSibling;
+  (neighbor ? neighbor.querySelector(".delete-btn") : document.querySelector("#listings-heading")).focus();
+  announce(`Listing deleted: ${row.dataset.title}.`);
+});
+document.body.addEventListener("htmx:responseError", (event)=>{
+  const {status:code, responseText}=event.detail.xhr;
+  let message=`The server answered ${code}.`;
+  try{
+    message=JSON.parse(responseText).error || message;
+  }catch{}
+  alert(`That entry was not deleted. ${message}`);
+});
+document.body.addEventListener("htmx:sendError", ()=>{
+  alert("That entry was not deleted. Could not reach the server.");
 });
