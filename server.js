@@ -19,7 +19,8 @@ const MONGODB_URI =
 const SESSION_SECRET =
   process.env.SESSION_SECRET ||
   (process.env.NODE_ENV === "production" ? "" : "dev-only-secret-change-me");
-if (!SESSION_SECRET) throw new Error("SESSION_SECRET needs to be set in production");
+if (!SESSION_SECRET)
+  throw new Error("SESSION_SECRET needs to be set in production");
 
 //connect to database
 await mongoose.connect(MONGODB_URI);
@@ -38,13 +39,18 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: MONGODB_URI }),
-    cookie: { httpOnly: true, sameSite: "lax", maxAge: 1000 * 60 * 60 * 24 * 7 },
+    cookie: {
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    },
   }),
 );
 
 //auth (see who's logged in as "user")
 app.use((req, res, next) => {
-  res.locals.user = req.session.user || null;
+  req.user = req.session.user || null;
+  res.locals.user = req.user;
   next();
 });
 

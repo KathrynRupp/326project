@@ -10,7 +10,7 @@ export const index = async (req, res) => {
 
 //create function
 export const create = async (req, res) => {
-  const listing = await listingsService.createListing(req.body);
+  const listing = await listingsService.createListing(req.body, req.user);
   if (!listing.ok) {
     res.status(listing.error.status).json({ error: listing.error.message });
     return;
@@ -25,7 +25,7 @@ export const update = async (req, res) => {
     res.status(400).json({ error: "id must be a valid id" });
     return;
   }
-  const listing = await listingsService.updateListing(id, req.body);
+  const listing = await listingsService.updateListing(id, req.body, req.user);
   if (!listing.ok) {
     res.status(listing.error.status).json({ error: listing.error.message });
     return;
@@ -40,7 +40,7 @@ export const destroy = async (req, res) => {
     res.status(400).json({ error: "id must be a valid id" });
     return;
   }
-  const listing = await listingsService.deleteListing(id);
+  const listing = await listingsService.deleteListing(id, req.user);
   if (!listing.ok) {
     res.status(listing.error.status).json({ error: listing.error.message });
     return;
