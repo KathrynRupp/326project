@@ -33,6 +33,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
+// authorization middleware
 app.use(
   session({
     secret: SESSION_SECRET,

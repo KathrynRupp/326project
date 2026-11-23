@@ -21,11 +21,15 @@ Our project domain is a borrowing forum for students. In this forum, students ca
 
 ## Setup:
 
-- Clone the repository to your local machine, and run "npm install" within the terminal within the folder "326Project"
-- Start MongoDB by running "dc-up mongo"
-- Run "npm start" within the terminal to start the server on your machine. This server opens on your machine, with the port 3000.
+- Clone the repository to your local machine, open up the project folder, and open it with "cd project".
+- Install the required dependencies by running "npm install" in the terminal.
+- Start MongoDB by running "dc-up mongo" and populate the CSS with "npm run build:css".
+- Start the server with "npm start".
 - You can visit any of the three routes that are currently included:
   - The home page: "http://localhost:3000/"
+  - The health check route: "http://localhost:3000/health"
+  - The signup page: "http://localhost:3000/signup"
+  - The login page: "http://localhost:3000/login"
   - The listings page: "http://localhost:3000/listings"
   - The requests page: "http://localhost:3000/requests"
 
@@ -57,82 +61,58 @@ The next feature is very similar to the first, but the major difference is that 
 
 ## System Diagram
 
-Let the following structure symbolize
-Item 1 being connected to item 3,
-Item 2 being connected to item 4
-
 ```text
-            +--------+
-            | Item 2 |
-            +----v---+
-+--------+       |        +--------+
-| Item 1 |-------|--------| Item 3 |
-+--------+       |        +--------+
-                 |
-            +----^---+
-            | Item 4 |
-            +--------+
-```
-
-```text
-                                                      +------------+
-                                      +---------------+ server.js  +----------------+
-                                      |               +-----+------+                |
-                                      |                     |                       |
-                                      v                     v                       v
-                           +--------------------+   +-----------------+  +-------------------+
-                           | routes/listings.js |   | routes/pages.js |  |routes/requests.js |
-                           +----------+---------+   +--------+--------+  +----------+--------+
-                                      |                      |                      |
-                                      |             +--------v-------+              |
-                                      |             | views/home.ejs |              |
-                                      |             +--------+-------+              |
-                                      |                      |                      |
-                                      |       +--------------v------------+         |
-    +---------------------------------|-------| views/partials/header.ejs |---------|-------------------------------------------+
-    |                                 |       +---------------------------+         |                                           |
-    |                                 |                                             |                                           |
-    |                                 |                                             |                                           |
-    |                                 |            +--------------------+           |                                           |
-    |                                 |            |  asyncHandler.js   |           |                                           |
-    |                                 |            +--------------------+           |                                           |
-    |                                 |            |                    |           |                                           |
-    |    +----------------+-----------v------------+                    +-----------v-----------+----------------------+        |
-+---^----v---------+      |     controllers/       |                    |   controllers/        |              +-------v--------^--+
-|views/listings.ejs|      | listingsController.js  |                    | requestsController.js |              |views/requests.ejs |
-+--------+---------+      +-----------+------------+                    +------------+----------+              +-------+-----------+
-         |                            |                                              |                                 |
-+--------v---------+       +----------v---------+    +--------------+     +----------v---------+               +-------v----------+
-|public/listings.js|       |      services/     |    |dtos/         |     |    services/       |               |public/requests.js|
-+--------+---------+       | listingsService.js <--+-+listingsDto.js|     | requestsService.js +---+           +-------+----------+
-         |                 +----------+---------+  | +--------------+     +----------+---------+   |                   +-----------------+
-         |                            |            |                                 |             |                                     |
-         |                            |            |                                 |    +--------+--------------------------+          |
-         |                            |            |                                 |    | __tests__/requestService.test.js  |          |
-         |                            |            |                                 |    |     REPOSITORIES MOCKED WITH:     |          |
-         |                            |            |                                 |    |     jest.unstable_mockModule      |          |
-         |                            |            |                                 |    +-----------------------------------+          |
-         |                            |            |                                 |                        +--------------------------=
-         |                            |            |                                 |                        |
-         |               +------------v----------+ |    +---------+       +----------v----------+             |
-         |               |     repositories/     | +----+result.js|       |   repositories/     |             |
-         |               | listingsRepository.js | |    +---------+       |requestsRepository.js|             |
-         |               +------------+----------+ |                      +------------------+--+             |
-         |                            |            |    +----------------------------------+ |                |
-         |                            |            |    | __tests__/listingService.test.js | |                |
-         |                            |            +----+      REPOSITORIES MOCKED WITH:   | |                |
-                                                        |      jest.unstable_mockModule    | |                |
-         |                            |                 +----------------------------------+ |                |
-         |                            |                                                      |                |
-         |                        +---v------------------------------------------------------v---+            |
-         |                        |                           MongoDB                            |            |
-         |                        +--------------------------------------------------------------+            |
-         |                                                                                                    |
-         |                                                                                                    |
-         |                                                                                                    |
-         |                                           +------------------+                                     |
-         +------------------------------------------>| public/style.css |<------------------------------------+
-                                                     +------------------+
+                                                      +-----------------------+
+                                                      | server.js             |
+                                                      | GET /health (public)  |
+                                                      | express-session       |
+                                                      | + connect-mongo       |
+                                                      +-----------+-----------+
+                                                                  |
+                                       +--------------------------+--------------------------+-----------------------------------------------------+
+                                       |                          |                          |                                                     |
+                                       v                          v                          v                                                     v
+                           +-----------------------+  +-----------------------+  +-----------------------+  +-----------------------+  +-----------------------+
+                           | routes/listings.js    |  | routes/pages.js       |  | routes/requests.js    |  | views/login.ejs       |  | routes/auth.js        |
+                           | requireLogin          |  +-----------+-----------+  | requireLogin          |  | views/signup.ejs      |<-| /signup /login        |
+                           +-----------+-----------+              |              +-----------+-----------+  +-----------------------+  +-----------+-----------+
+                                       |                          |                          |                                                     |
+                                       |                          v                          |                                                     |
+                                       |              +-----------------------+              |                                                     |
+                                       |              | views/home.ejs        |              |                                                     |
+                                       |              +-----------+-----------+              |                                                     |
+                                       |                          v                          |                                                     |
+                                       |              +-----------------------+              |                                                     |
+                                       |              | partials/header.ejs   |              |                                                     |
+                                       |              +-----------------------+              |                                                     |
+                                       |                                                     |                                                     |
+                                       v                                                     v                                                     v
+                           +-----------------------+  +-----------------------+  +-----------------------+                             +-----------------------+
++-----------------------+  | controllers/          |--| asyncHandler.js       |--| controllers/          |  +-----------------------+  | services/             |
+| views/listings.ejs    |<-| listingsController.js |  +-----------------------+  | requestsController.js |->| views/requests.ejs    |  | authService.js        |
++-----------+-----------+  +-----------+-----------+                             +-----------+-----------+  +-----------+-----------+  | bcrypt                |
+            v                          |                                                     |                          v              +-----------+-----------+
++-----------------------+              |              +-----------------------+              |              +-----------------------+              |
+| public/listings.js    |--------------+------------->| public/style.css      |<-------------+--------------| public/requests.js    |              |
++-----------------------+              v              +-----------------------+              v              +-----------------------+              |
+                           +-----------------------+  +-----------------------+  +-----------------------+                                         |
++-----------------------+  | services/             |<-| dtos/listingsDto.js   |  | services/             |  +-----------------------+              |
+| __tests__/            |->| listingsService.js    |  +-----------------------+  | requestsService.js    |<-| __tests__/            |              |
+| listingService.test.js|  | isOwnerOrAdmin (403)  |                             +-----------+-----------+  | requestService.test.js|              |
++-----------------------+  +-----------+-----------+                                         |              +-----------------------+              |
+                                       |                                                     |                                                     |
+                                       |                                                     |                                                     |
+                                       v                                                     v                                                     v
+                           +-----------------------+  +-----------------------+  +-----------------------+                             +-----------------------+
+                           | repositories/         |<-| result.js             |  | repositories/         |                             | models/User.js        |
+                           | listingsRepository.js |  +-----------------------+  | requestsRepository.js |                             | role: member|admin    |
+                           +-----------+-----------+                             +-----------+-----------+                             +-----------+-----------+
+                                       |                                                     |                                                     |
+                                       |                                                     |                                                     |
+                                       v                                                     v                                                     v
+                           +-----------------------------------------------------------------------------------------------------------------------------------+
+                           | MongoDB (users, sessions, listings, requests)                                                                                     |
+                           +-----------------------------------------------------------------------------------------------------------------------------------+
 ```
 
 ## Design Decisions
@@ -146,6 +126,10 @@ One design decision I made was to include a validation function in the listingsR
 #### Sprint 3
 
 I followed the unit's approach to creating the HTMX interaction for the delete button in the listings route. An alternative would be what we did before: a click listener in public/listings.js that called fetchJSON with DELETE and then removed the list item from the DOM by hand. I think the HTMX version is better for our app because the delete button now carries its own URL (hx-delete) and confirm test (hx-confirm) as attributes. Since listings.js also builds new cards in the browser, a listing added without a page reload works as soon as htmx.process sees it, and the server-rendered and browser-built cards use the same button markup.
+
+#### Sprint 4
+
+For this sprint, I made the health check route before the express-session middleware and made it return { "status": ok }, to let a user know the app is running without having to be logged in. An alternative would be having a health check route that is able to give more information about what is running, e.g., whether the database is connected. The reason I chose the simple version is because the health check should simply answer whether or not the app is running. Including a database connection check would have made the construction of the route more complex, because it would have to connect to the repository because that is the only place that touches the database. This approach makes it so that the route responds with "ok" even if the database is down.
 
 ### Anika Mukka
 
@@ -189,17 +173,36 @@ I was responsible for writing tests for requests services. My design decision wa
 
 I was responsible for accessibility audit part. When a listing is deleted with HTMX, the row (and the button that had focus) is removed, so the browser drops keyboard focus to the top of the page. I fixed this in an htmx:beforeSwap handler that moves focus to the next row's Delete button, or the previous rows, or the page heading if the list is now empty, and announce the deletion in a live region. The alternative way is to always send focus to one fixed place after a delete, such as the Listings heading. I think my shipped version is better. Moving to neighbor row is better because a keyboard user clearing out several listings wouldn't have to Tab through eight stops before reaching the list again after every delete.
 
-## Accessibility Audit
-
-| Found | Fix | How to check |
-| Category dropdowns had no accessible name, and text inputs relied on placeholders | Every input and select is wrapped in a label with sr-only text, including the edit form built in listings.js | Run an axe or Lighthouse scan: no missing-label errors |
-| Focus was lost to the top of the page after delete, edit, save, cancel, and add | Focus moves to the next row's Delete button (or the heading), the first field of the edit form, the row's Edit button, or the title field | Tab to Delete, press Enter, confirm: focus stays on the next row. Press Edit: focus is in the first field. Escape cancels |
-| Placeholder text was 3.05:1 | placeholder:text-slate-500 (4.76:1) | DevTools color picker on a placeholder |
-| Primary button and input focus rings were 1.67:1 and 1.33:1 | Darker ring with an offset (5.86:1) | Tab to Add Listing: a clear blue ring appears |
-| Edit and Delete buttons had no context for screen readers | aria-label with the item title | Inspect a button: aria-label is Delete <title> |
-
 ## Sprint 3 Changes
 
 We did not have to change the repository to use MongoDB because we chose to implement that during Sprint 2. This means each of the /requests and /listings repositories have their own respective MongoDB collection. Additionally, both the listings and requests services have tests (see Running the Tests).
 
 We turned the delete button on the listings page into an HTMX interaction. The shared header and the home, listings, and requests pages are styled with Tailwind utility classes and are responsive. The forms stack in one column on a phone and spread into rows on wider screens.
+
+## Sprint 4 Changes
+
+### Authentication
+
+In order to sign up, navigate to http://localhost:3000/signup and enter your name, email, and password. In order to log in, navigate to http://localhost:3000/login, and enter your email and matching password.
+
+We used session-based authentication with express-session and connect-mongo. We chose it because the session data will live on the server, so the browser only holds a signed httpOnly cookie. Passwords are hashed with bcrypt in authService before they are stored, and only the hash is saved.
+
+### Authorization
+
+For authorization, we decided to make two roles: member and admin. Every account is created with the member role by default, and the signup form cannot set a role.
+
+The authorization rule that you can test is that only the owner of a listing or an admin can edit or delete it. Any other user will get a 403 error. To check this manually, you can (1) log in as user A and create a listing, (2) log out, then log in as a different user B and try to delete it, which fails with a 403, and (3) log in as user A and try again, and see that it succeeds. To check it automatically, run "npm test" in the terminal and verify that there are no errors.
+
+### Accessibility Audit
+
+| Found                                                                             | Fix                                                                                                                                       | How to check                                                                                                              |
+| --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Category dropdowns had no accessible name, and text inputs relied on placeholders | Every input and select is wrapped in a label with sr-only text, including the edit form built in listings.js                              | Run an axe or Lighthouse scan: no missing-label errors                                                                    |
+| Focus was lost to the top of the page after delete, edit, save, cancel, and add   | Focus moves to the next row's Delete button (or the heading), the first field of the edit form, the row's Edit button, or the title field | Tab to Delete, press Enter, confirm: focus stays on the next row. Press Edit: focus is in the first field. Escape cancels |
+| Placeholder text was 3.05:1                                                       | placeholder:text-slate-500 (4.76:1)                                                                                                       | DevTools color picker on a placeholder                                                                                    |
+| Primary button and input focus rings were 1.67:1 and 1.33:1                       | Darker ring with an offset (5.86:1)                                                                                                       | Tab to Add Listing: a clear blue ring appears                                                                             |
+| Edit and Delete buttons had no context for screen readers                         | aria-label with the item title                                                                                                            | Inspect a button: aria-label is Delete `<title>`                                                                          |
+
+### Health Check Route
+
+GET /health returns { "status": "ok" } with a status 200. The route does not require logging in so anybody can see if the server is healthy. It can be checked manually by visiting http://localhost:3000/health while the server is running and while you are logged out to confirm that the page returns { "status": "ok" } for anybody.
