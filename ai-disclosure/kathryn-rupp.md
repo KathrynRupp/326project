@@ -15,3 +15,7 @@ I did not use any AI in this commit.
 ## Sprint 3
 
 I did not use any AI in this commit.
+
+## Sprint 4
+
+I did not use any AI in this commit.
