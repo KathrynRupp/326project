@@ -157,6 +157,9 @@ One design decision I made was to put validation in requestsService.js instead o
 
 My main task was to implement Tailwind to our sprint where I followed unit 15's approach. One decision I made for the Tailwind restyle was to build the repeated patterns with @apply in src/input.css, instead of writing the full list of utility classes on every element. The alternative to this is to repeat the utilities inline everywhere. This would have been much more difficult since listings.js and requests.js build our cards in the browser so every change would have meant editing the same long class strings in the views and in the scripts, and one missed spot would make newly added items look different from the ones the server renders. With the named class (what I implemented) it all lives in one place and the views and the scripts say card. This is better for our project since it is all in src/input.css and stays more organized.
 
+#### Sprint 4
+One design decision I made was storing sessions in MongoDB with express-session and connect-mongo. I mainly chose this approach because that is what we learned in Unit 17 but after considering alternatives this still seemed like the best option. An alternative to this method would be the hand-built in-memory session map from the main example. The map is shorter and easier to read, but it lives in the server's memory, so every restart logs every user out, and we restart the server constantly while building. This would also stop working if the app ever ran on more than one server because each one would have its own map. With connect-mongo a session lives in the same database as our listings and requests, so a restart doesn't end it and the browser only holds a signed random id. The cost of doing my method is two extra packages and one more collection in the database.
+
 ### Nathan Ho
 
 #### Sprint 2
